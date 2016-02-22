@@ -320,4 +320,3 @@ void GpgSignKeyEditInteractor::setSigningOptions(int options)
     assert(!d->started);
     d->options = options;
 }
-

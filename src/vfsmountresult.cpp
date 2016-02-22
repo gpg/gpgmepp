@@ -96,4 +96,3 @@ std::ostream &GpgME::operator<<(std::ostream &os, const VfsMountResult &result)
     }
     return os << ')';
 }
-

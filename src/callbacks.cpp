@@ -185,4 +185,3 @@ const gpgme_data_cbs GpgME::data_provider_callbacks = {
     &data_seek_callback,
     &data_release_callback
 };
-

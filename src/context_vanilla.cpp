@@ -33,4 +33,3 @@ QIODevice *GpgME::getQIODevice(int)
 {
     return 0;
 }
-

@@ -26,8 +26,6 @@
 
 #include "gpgmepp_export.h"
 
-#include <qglobal.h>
-
 namespace GpgME
 {
 
