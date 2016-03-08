@@ -37,7 +37,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget KF5::Gpgmepp KF5::QGpgme)
+foreach(_expectedTarget KF5::Gpgmepp Gpgmepp)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -69,17 +69,9 @@ add_library(Gpgmepp SHARED IMPORTED)
 
 set_target_properties(Gpgmepp PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/gpgme++"
-  INTERFACE_LINK_LIBRARIES "@libdir@/libgpgme.dll.a;@LIBASSUAN_LIBS@;@GPG_ERROR_LIBS@"
+  INTERFACE_LINK_LIBRARIES "@resolved_libdir@/libgpgme@libsuffix@;@LIBASSUAN_LIBS@;@GPG_ERROR_LIBS@"
+  IMPORTED_LOCATION "@resolved_libdir@/libgpgmepp@libsuffix@"
 )
-
-# Create imported target QGpgme
-#add_library(QGpgme SHARED IMPORTED)
-
-#set_target_properties(KF5::QGpgme PROPERTIES
-#   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/qgpgme"
-   #  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX} TODO"
-#  INTERFACE_LINK_LIBRARIES "Qt5::Core"
-#)
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
   message(FATAL_ERROR "This file relies on consumers using CMake 2.8.12 or greater.")
@@ -107,9 +99,10 @@ but not all the files it references.
 endforeach()
 unset(_IMPORT_CHECK_TARGETS)
 
-# This file does not depend on other imported targets which have
-# been exported from the same project but in a separate export set.
-
 # Commands beyond this point should not need to know the version.
 set(CMAKE_IMPORT_FILE_VERSION)
 cmake_policy(POP)
+
+get_filename_component(QGpgme_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+# Pull in QGpgme for compatibility with KF5 variant.
+find_package(QGpgme CONFIG)
