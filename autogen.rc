@@ -1,0 +1,3 @@
+# autogen.sh configuration for GpgME++                      -*- sh -*-
+
+final_info="mkdir build && cd build && ../configure --enable-maintainer-mode && make"
