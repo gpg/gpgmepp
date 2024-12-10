@@ -3,6 +3,10 @@ Noteworthy changes in version 2.0.0 (unreleased)
 
  * First separate release of GpgME++.
 
+ * cmake: The gpgme++ folder containing the header files is no longer exported
+   as include directory. All headers have to be included with the prefix
+   gpgme++/ now.
+
 
 Noteworthy changes in earlier versions can be found in the NEWS file of
 gpgme.
