@@ -4,7 +4,7 @@
   2016 Bundesamt für Sicherheit in der Informationstechnik
   Software engineering by Intevation GmbH
 
-  This file is part of GPGME.
+  This file is part of GPGME++.
 
   GPGME++ is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
