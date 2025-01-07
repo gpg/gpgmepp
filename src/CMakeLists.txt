@@ -120,14 +120,10 @@ set(Gpgmepp_interface_HEADERS
 )
 
 target_include_directories(Gpgmepp
-    PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    ${LibGpgError_INCLUDE_DIRS}
-    PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+    PRIVATE ${LibGpgError_INCLUDE_DIRS}
+    INTERFACE $<INSTALL_INTERFACE:include>
 )
+
 target_link_libraries(Gpgmepp Gpgme::Gpgme)
 
 set_target_properties(Gpgmepp PROPERTIES
