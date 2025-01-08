@@ -20,7 +20,6 @@
 # License along with this program; if not, see <https://gnu.org/licenses/>.
 # SPDX-License-Identifier: LGPL-2.1-or-later
 
-add_compile_definitions(BUILDING_GPGMEPP)
 add_compile_definitions(GPG_ERR_SOURCE_DEFAULT=GPG_ERR_SOURCE_GPGME)
 if(WIN32)
   add_compile_definitions(GPG_ERR_ENABLE_GETTEXT_MACROS=1)
@@ -82,7 +81,6 @@ set(Gpgmepp_HEADERS
     gpgagentgetinfoassuantransaction.h
     gpggencardkeyinteractor.h
     gpgmefw.h
-    gpgmepp_export.h
     gpgrevokekeyeditinteractor.h
     gpgsetexpirytimeeditinteractor.h
     gpgsetownertrusteditinteractor.h
@@ -132,6 +130,12 @@ set_target_properties(Gpgmepp PROPERTIES
     SOVERSION ${LIBGPGMEPP_SOVERSION}
 )
 
+include(GenerateExportHeader)
+generate_export_header(Gpgmepp)
+# create a copy of the export header in a gpgme++/ folder so that the includes
+# in the interfaces headers work during the build
+configure_file(${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_export.h gpgme++/gpgmepp_export.h COPYONLY)
+
 set(resolved_includedir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
 set(resolved_libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 set(resolved_bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
@@ -165,6 +169,7 @@ install(FILES ${Gpgmepp_interface_HEADERS}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gpgme++/interfaces)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_version.h
+              ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_export.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gpgme++)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfigVersion.cmake
