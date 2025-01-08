@@ -136,30 +136,26 @@ generate_export_header(Gpgmepp)
 # in the interfaces headers work during the build
 configure_file(${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_export.h gpgme++/gpgmepp_export.h COPYONLY)
 
-set(resolved_includedir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
-set(resolved_libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-set(resolved_bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
-set(libsuffix "${CMAKE_SHARED_LIBRARY_SUFFIX}")
+include(ECMSetupVersion)
+ecm_setup_version(PROJECT
+                  VARIABLE_PREFIX GPGMEPP
+                  SOVERSION "${LIBGPGMEPP_SOVERSION}"
+                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_version.h"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfigVersion.cmake"
+                  COMPATIBILITY AnyNewerVersion
+)
+
+include(CMakePackageConfigHelpers)
+set(CMAKECONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/Gpgmepp)
+configure_package_config_file(GpgmeppConfig.cmake.in
+                              ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake
+                              INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+)
 
 if (MSVC)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GpgmeppConfig-msvc.cmake.in.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake @ONLY)
-elseif (WIN32)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GpgmeppConfig-w32.cmake.in.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake @ONLY)
+    install(TARGETS Gpgmepp EXPORT GpgmeppTargets "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 else()
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GpgmeppConfig.cmake.in.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake @ONLY)
-endif()
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GpgmeppConfigVersion.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfigVersion.cmake @ONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gpgmepp_version.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_version.h)
-
-if (MSVC)
-    install(TARGETS Gpgmepp DESTINATION ${resolved_bindir})
-else()
-    install(TARGETS Gpgmepp)
+    install(TARGETS Gpgmepp EXPORT GpgmeppTargets)
 endif()
 
 install(FILES ${Gpgmepp_HEADERS}
@@ -174,4 +170,10 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_version.h
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfigVersion.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Gpgmepp)
+        DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+install(EXPORT GpgmeppTargets
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        FILE GpgmeppTargets.cmake)
+install(FILES ${CMAKE_SOURCE_DIR}/cmake/modules/FindGpgme.cmake
+              ${CMAKE_SOURCE_DIR}/cmake/modules/FindLibGpgError.cmake
+        DESTINATION ${CMAKECONFIG_INSTALL_DIR})
