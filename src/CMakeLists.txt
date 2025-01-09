@@ -158,6 +158,11 @@ else()
     install(TARGETS Gpgmepp EXPORT GpgmeppTargets)
 endif()
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gpgmepp.pc.in
+               ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp.pc
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+
 install(FILES ${Gpgmepp_HEADERS}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gpgme++)
 
