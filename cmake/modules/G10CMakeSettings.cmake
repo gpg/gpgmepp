@@ -33,6 +33,15 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
+################ Testing setup ####################################
+
+option(BUILD_TESTING "Build the testing tree" ON)
+if(BUILD_TESTING)
+    enable_testing()
+endif()
+
+
+
 ################ Build-related settings ###########################
 
 # Always include srcdir and builddir in include path
