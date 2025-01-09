@@ -46,6 +46,8 @@ set(GPGME_REQUIRED_VERSION "1.24.2")
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 include(G10CMakeSettings)
+
+include(G10AddDistTargets)
 include(G10CompilerSettings)
 include(G10GetFullVersion)
 include(ECMUninstallTarget)
@@ -74,6 +76,15 @@ elseif(EXISTS "${CMAKE_SOURCE_DIR}/VERSION")
 else()
     file(WRITE "${CMAKE_BINARY_DIR}/VERSION" "${G10_FULL_VERSION}\nunknown\n")
 endif()
+
+set(EXTRA_DIST
+    "${CMAKE_BINARY_DIR}/VERSION"
+)
+g10_add_dist_targets(
+    VERSION "${G10_FULL_VERSION}"
+    ARCHIVE_FORMAT "tar.xz"
+    EXTRA_FILES ${EXTRA_DIST}
+)
 
 add_subdirectory(src)
 
