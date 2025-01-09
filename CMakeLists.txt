@@ -48,6 +48,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 include(G10CMakeSettings)
 
 include(G10AddDistTargets)
+include(G10AddGenChangeLogTarget)
 include(G10CompilerSettings)
 include(G10GetFullVersion)
 include(ECMUninstallTarget)
@@ -77,7 +78,14 @@ else()
     file(WRITE "${CMAKE_BINARY_DIR}/VERSION" "${G10_FULL_VERSION}\nunknown\n")
 endif()
 
+# start ChangeLog at import from KDE in gpgme repo
+g10_add_gen_changelog_target(
+    SINCE "2016-03-08T00:00:00"
+    FOOTER "${CMAKE_SOURCE_DIR}/build-aux/git-log-footer"
+)
+
 set(EXTRA_DIST
+    "${CMAKE_BINARY_DIR}/ChangeLog"
     "${CMAKE_BINARY_DIR}/VERSION"
 )
 g10_add_dist_targets(
@@ -85,6 +93,7 @@ g10_add_dist_targets(
     ARCHIVE_FORMAT "tar.xz"
     EXTRA_FILES ${EXTRA_DIST}
 )
+add_dependencies(dist gen-ChangeLog)
 
 add_subdirectory(src)
 
