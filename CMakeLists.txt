@@ -104,6 +104,9 @@ if(UNIX)
     )
 endif()
 
+include(G10GitHooks)
+g10_configure_git_hooks()
+
 add_subdirectory(src)
 
 if(BUILD_TESTING)
