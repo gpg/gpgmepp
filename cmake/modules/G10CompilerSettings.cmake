@@ -80,6 +80,10 @@ if (UNIX)
         _g10_add_platform_definitions(-D_FILE_OFFSET_BITS=64)
     endif ()
 endif()
+if (MINGW)
+    # Always use 64-bit file offsets on Windows (with MinGW)
+    _g10_add_platform_definitions(-D_FILE_OFFSET_BITS=64)
+endif()
 
 if (WIN32)
     # Speeds up compile times by not including everything with windows.h
