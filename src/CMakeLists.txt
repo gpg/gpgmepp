@@ -25,9 +25,14 @@ if(WIN32)
   add_compile_definitions(GPG_ERR_ENABLE_GETTEXT_MACROS=1)
 endif()
 
-add_library(Gpgmepp SHARED)
+if(ENABLE_SHARED)
+    add_library(Gpgmepp SHARED)
+endif()
+if(ENABLE_STATIC)
+    add_library(GpgmeppStatic STATIC)
+endif()
 
-target_sources(Gpgmepp PRIVATE
+set(Gpgmepp_SOURCES
     callbacks.cpp
     configuration.cpp
     context.cpp
@@ -117,21 +122,57 @@ set(Gpgmepp_interface_HEADERS
     interfaces/statusconsumer.h
 )
 
-target_include_directories(Gpgmepp
-    PRIVATE ${LibGpgError_INCLUDE_DIRS}
-    INTERFACE $<INSTALL_INTERFACE:include>
-)
+if(ENABLE_SHARED)
+    target_sources(Gpgmepp PRIVATE ${Gpgmepp_SOURCES})
 
-target_link_libraries(Gpgmepp Gpgme::Gpgme)
+    target_include_directories(Gpgmepp
+        PRIVATE ${LibGpgError_INCLUDE_DIRS}
+        INTERFACE $<INSTALL_INTERFACE:include>
+    )
 
-set_target_properties(Gpgmepp PROPERTIES
-    OUTPUT_NAME gpgmepp
-    VERSION "${LIBGPGMEPP_SOVERSION}.${LIBGPGMEPP_LT_AGE}.${LIBGPGMEPP_LT_REVISION}"
-    SOVERSION ${LIBGPGMEPP_SOVERSION}
-)
+    target_link_libraries(Gpgmepp Gpgme::Gpgme)
+
+    set_target_properties(Gpgmepp PROPERTIES
+        OUTPUT_NAME gpgmepp
+        VERSION "${LIBGPGMEPP_SOVERSION}.${LIBGPGMEPP_LT_AGE}.${LIBGPGMEPP_LT_REVISION}"
+        SOVERSION ${LIBGPGMEPP_SOVERSION}
+    )
+endif()
+if(ENABLE_STATIC)
+    target_sources(GpgmeppStatic PRIVATE ${Gpgmepp_SOURCES})
+
+    target_include_directories(GpgmeppStatic
+        PRIVATE ${LibGpgError_INCLUDE_DIRS}
+        INTERFACE $<INSTALL_INTERFACE:include>
+    )
+
+    target_link_libraries(GpgmeppStatic Gpgme::Gpgme)
+
+    set_target_properties(GpgmeppStatic PROPERTIES
+        OUTPUT_NAME gpgmepp
+        VERSION "${LIBGPGMEPP_SOVERSION}.${LIBGPGMEPP_LT_AGE}.${LIBGPGMEPP_LT_REVISION}"
+        COMPILE_FLAGS -DGPGMEPP_STATIC_DEFINE
+    )
+endif()
 
 include(GenerateExportHeader)
-generate_export_header(Gpgmepp)
+if(ENABLE_SHARED)
+    generate_export_header(Gpgmepp)
+else()
+    # workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/23195:
+    # we want to generate the same export header for the static library as for
+    # the shared library (to avoid co-installation problems); therefore, we add
+    # a dummy shared library target and generate the export header for this target;
+    # users of the static library will have to define GPGMEPP_STATIC_DEFINE to
+    # get the correct EXPORT macros
+    add_library(GpgmeppDummy SHARED context_vanilla.cpp)
+    set_target_properties(GpgmeppDummy PROPERTIES
+        DEFINE_SYMBOL Gpgmepp_EXPORTS
+    )
+    generate_export_header(GpgmeppDummy
+        BASE_NAME gpgmepp
+    )
+endif()
 # create a copy of the export header in a gpgme++/ folder so that the includes
 # in the interfaces headers work during the build
 configure_file(${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_export.h gpgme++/gpgmepp_export.h COPYONLY)
@@ -152,10 +193,15 @@ configure_package_config_file(GpgmeppConfig.cmake.in
                               INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
 )
 
-if (MSVC)
-    install(TARGETS Gpgmepp EXPORT GpgmeppTargets "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
-else()
-    install(TARGETS Gpgmepp EXPORT GpgmeppTargets)
+if(ENABLE_SHARED)
+    if (MSVC)
+        install(TARGETS Gpgmepp EXPORT GpgmeppTargets "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+    else()
+        install(TARGETS Gpgmepp EXPORT GpgmeppTargets)
+    endif()
+endif()
+if(ENABLE_STATIC)
+    install(TARGETS GpgmeppStatic)
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gpgmepp.pc.in
@@ -173,12 +219,15 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_version.h
               ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp_export.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gpgme++)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfigVersion.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake
-        DESTINATION ${CMAKECONFIG_INSTALL_DIR})
-install(EXPORT GpgmeppTargets
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        FILE GpgmeppTargets.cmake)
-install(FILES ${CMAKE_SOURCE_DIR}/cmake/modules/FindGpgme.cmake
-              ${CMAKE_SOURCE_DIR}/cmake/modules/FindLibGpgError.cmake
-        DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+# for now we install the cmake config files only for the shared library
+if(ENABLE_SHARED)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfigVersion.cmake
+                ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppConfig.cmake
+            DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+    install(EXPORT GpgmeppTargets
+            DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+            FILE GpgmeppTargets.cmake)
+    install(FILES ${CMAKE_SOURCE_DIR}/cmake/modules/FindGpgme.cmake
+                ${CMAKE_SOURCE_DIR}/cmake/modules/FindLibGpgError.cmake
+            DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+endif()

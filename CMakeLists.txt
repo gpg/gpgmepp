@@ -43,6 +43,9 @@ math(EXPR LIBGPGMEPP_SOVERSION "${LIBGPGMEPP_LT_CURRENT} - ${LIBGPGMEPP_LT_AGE}"
 set(GPG_ERROR_REQUIRED_VERSION "1.47")
 set(GPGME_REQUIRED_VERSION "1.24.2")
 
+option(ENABLE_SHARED "Build shared libraries" ON)
+option(ENABLE_STATIC "Build static libraries" OFF)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 include(G10CMakeSettings)
@@ -109,7 +112,7 @@ g10_configure_git_hooks()
 
 add_subdirectory(src)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND ENABLE_SHARED)
     add_subdirectory(tests)
 endif()
 
