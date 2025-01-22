@@ -45,6 +45,9 @@ set(GPGME_REQUIRED_VERSION "1.24.2")
 
 option(ENABLE_SHARED "Build shared libraries" ON)
 option(ENABLE_STATIC "Build static libraries" OFF)
+# The following option is used in gpg4win to distinguish the 32-bit build from
+# the 64-bit build
+option(PKGCONFIG_HOST "The host value to write in the pkgconfig file" "")
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 

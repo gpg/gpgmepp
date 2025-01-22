@@ -204,6 +204,10 @@ if(ENABLE_STATIC)
     install(TARGETS GpgmeppStatic)
 endif()
 
+set(pkgconfig_host_line "")
+if(PKGCONFIG_HOST)
+    set(pkgconfig_host_line "host=${PKGCONFIG_HOST}\n")
+endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gpgmepp.pc.in
                ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp.pc
