@@ -90,7 +90,7 @@
 ** Coding standards
 
   Please follow the KDE Coding styles. See:
-  https://techbase.kde.org/Policies/Frameworks_Coding_Style
+  https://community.kde.org/Policies/Frameworks_Coding_Style
   If you are in doubt consult the existing code as an example.  Do no
   re-indent code without a need.  If you really need to do it, use a
   separate commit for such a change.
@@ -114,5 +114,8 @@
 
 * Debug hints
 
-  - The envvar GPGME_DEBUG enables debugging of gpgme; see gpgme's
-    debug.[ch] for details.
+  - The environment variable GPGMEPP_INTERACTOR_DEBUG enables debugging
+    of the EditInteractor classes. Allowed values are `stdout`, `stderr`,
+    or a file path.
+  - The environment variable GPGME_DEBUG enables debugging of gpgme;
+    see gpgme's debug.[ch] for details.
