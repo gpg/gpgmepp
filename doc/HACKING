@@ -1,11 +1,11 @@
 # HACKING                                                       -*- org -*-
-#+TITLE: Hacking notes for GPGMEPP
+#+TITLE: Hacking notes for GPGME++
 #+STARTUP: showall
 
 * How to contribute
 ** No more ChangeLog files
 
-  Do not modify any of the ChangeLog files in GPGMEPP.  We put change
+  Do not modify any of the ChangeLog files in GPGME++.  We put change
   information only in the GIT commit log, and generate a top-level
   ChangeLog file from logs at "make dist" time.  As such, there are
   strict requirements on the form of the commit log messages.
@@ -51,14 +51,14 @@
 
 ** License policy
 
-  GPGMEPP is currently licensed under the LGPLv2.0+ with some tests
+  GPGME++ is currently licensed under the LGPLv2.0+ with some tests
   being under the GPLv2(only).  We may eventually update to a newer
   version of the licenses or a combination of them.  It is thus
   important, that all contributed code allows for an update of the
   license; for example we can't accept code under the LGPLv2(only).
 
-  If you want to contribute code or documentation to GPGMEPP you are
-  asked to assert that the contribution is in accordance to the "GPGMEPP
+  If you want to contribute code or documentation to GPGME++ you are
+  asked to assert that the contribution is in accordance to the "GPGME++
   Developer's Certificate of Origin" as found in the file "DCO".
   Except for a slight wording change, this DCO is identical to the one
   used by the Linux kernel.  Please take these simple steps:
