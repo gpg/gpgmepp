@@ -62,7 +62,6 @@ set(Gpgmepp_SOURCES
     statusconsumerassuantransaction.cpp
     swdbresult.cpp
     tofuinfo.cpp
-    trustitem.cpp
     util.cpp
     verificationresult.cpp
     vfsmountresult.cpp
@@ -101,7 +100,6 @@ set(Gpgmepp_HEADERS
     statusconsumerassuantransaction.h
     swdbresult.h
     tofuinfo.h
-    trustitem.h
     verificationresult.h
     vfsmountresult.h
 )

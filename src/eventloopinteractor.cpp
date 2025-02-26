@@ -31,7 +31,6 @@
 #include <context.h>
 #include "context_p.h"
 #include <key.h>
-#include <trustitem.h>
 
 #include <gpgme.h>
 
@@ -142,12 +141,6 @@ void EventLoopInteractor::Private::eventIOCb(void *data, gpgme_event_io_t type, 
     case GPGME_EVENT_NEXT_KEY: {
         gpgme_key_t key = static_cast<gpgme_key_t>(type_data);
         instance()->nextKeyEvent(ctx, Key(key, false));
-    }
-    break;
-    case GPGME_EVENT_NEXT_TRUSTITEM: {
-        gpgme_trust_item_t item = static_cast<gpgme_trust_item_t>(type_data);
-        instance()->nextTrustItemEvent(ctx, TrustItem(item));
-        gpgme_trust_item_unref(item);
     }
     break;
     default: // warn

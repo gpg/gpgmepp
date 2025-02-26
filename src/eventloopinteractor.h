@@ -33,7 +33,6 @@ namespace GpgME
 
 class Context;
 class Error;
-class TrustItem;
 class Key;
 
 /*! \file eventloopinteractor.h
@@ -46,8 +45,8 @@ class Key;
     IO Callback handling and one for gpgme events. The IO Callback
     interface consists of the three methods \c actOn(), \c
     registerWatcher() and \c unregisterWatcher(). The event
-    interface consists of the three methods \c nextTrustItemEvent(),
-    \c nextKeyEvent() and \c operationDoneEvent().
+    interface consists of the two methods \c nextKeyEvent() and
+    \c operationDoneEvent().
 
     \sect General Usage
 
@@ -142,7 +141,6 @@ protected:
     //
 
     virtual void operationStartEvent(Context *context) = 0;
-    virtual void nextTrustItemEvent(Context *context, const TrustItem &item) = 0;
     virtual void nextKeyEvent(Context *context, const Key &key) = 0;
     virtual void operationDoneEvent(Context *context, const Error &e) = 0;
 

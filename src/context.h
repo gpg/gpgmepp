@@ -40,7 +40,6 @@ namespace GpgME
 {
 
 class Data;
-class TrustItem;
 class ProgressProvider;
 class PassphraseProvider;
 class EventLoopInteractor;
@@ -365,14 +364,6 @@ public:
 
     EditInteractor *lastCardEditInteractor() const;
     std::unique_ptr<EditInteractor> takeLastCardEditInteractor();
-
-    //
-    // Trust Item Management
-    //
-
-    GpgME::Error startTrustItemListing(const char *pattern, int maxLevel);
-    TrustItem nextTrustItem(GpgME::Error &e);
-    GpgME::Error endTrustItemListing();
 
     //
     // Assuan Transactions

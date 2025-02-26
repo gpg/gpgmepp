@@ -27,7 +27,6 @@
 
 #include <context.h>
 #include <eventloopinteractor.h>
-#include <trustitem.h>
 #include <keylistresult.h>
 #include <keygenerationresult.h>
 #include <importresult.h>
@@ -942,24 +941,6 @@ EditInteractor *Context::lastCardEditInteractor() const
 std::unique_ptr<EditInteractor> Context::takeLastCardEditInteractor()
 {
     return std::move(d->lastCardEditInteractor);
-}
-
-Error Context::startTrustItemListing(const char *pattern, int maxLevel)
-{
-    d->lastop = Private::TrustList;
-    return Error(d->lasterr = gpgme_op_trustlist_start(d->ctx, pattern, maxLevel));
-}
-
-TrustItem Context::nextTrustItem(Error &e)
-{
-    gpgme_trust_item_t ti = nullptr;
-    e = Error(d->lasterr = gpgme_op_trustlist_next(d->ctx, &ti));
-    return TrustItem(ti);
-}
-
-Error Context::endTrustItemListing()
-{
-    return Error(d->lasterr = gpgme_op_trustlist_end(d->ctx));
 }
 
 static gpgme_error_t assuan_transaction_data_callback(void *opaque, const void *data, size_t datalen)
