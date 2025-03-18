@@ -469,7 +469,9 @@ public:
         EncryptWrap = 128,
         WantAddress = 256,
         EncryptArchive = 512,
-        EncryptFile = 1024
+        EncryptFile = 1024,
+        AddRecipient = 2048,
+        ChangeRecipient = 4096,
     };
     EncryptionResult encrypt(const std::vector<Key> &recipients, const Data &plainText, Data &cipherText, EncryptionFlags flags);
     GpgME::Error encryptSymmetrically(const Data &plainText, Data &cipherText);

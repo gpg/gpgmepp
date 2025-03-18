@@ -1354,6 +1354,12 @@ static gpgme_encrypt_flags_t encryptflags2encryptflags(Context::EncryptionFlags 
     if (flags & Context::EncryptFile) {
         result |= GPGME_ENCRYPT_FILE;
     }
+    if (flags & Context::AddRecipient) {
+        result |= GPGME_ENCRYPT_ADD_RECP;
+    }
+    if (flags & Context::ChangeRecipient) {
+        result |= GPGME_ENCRYPT_CHG_RECP;
+    }
     return static_cast<gpgme_encrypt_flags_t>(result);
 }
 
