@@ -37,6 +37,7 @@
 #include <engineinfo.h>
 #include <editinteractor.h>
 #include <vfsmountresult.h>
+#include <randomresults.h>
 
 #include <interfaces/assuantransaction.h>
 #include <defaultassuantransaction.h>
@@ -1846,6 +1847,27 @@ Error Context::setFlag(const char *name, const char *value)
 const char *Context::getFlag(const char *name) const
 {
   return gpgme_get_ctx_flag(d->ctx, name);
+}
+
+RandomBytesResult Context::generateRandomBytes(size_t count, RandomMode mode)
+{
+    RandomBytesResult::value_type randomBytes(count);
+    d->lasterr = gpgme_op_random_bytes(d->ctx, static_cast<gpgme_random_mode_t>(mode),
+                                       reinterpret_cast<char *>(randomBytes.data()), count);
+    if (d->lasterr) {
+        return RandomBytesResult{Error{d->lasterr}};
+    }
+    return RandomBytesResult{randomBytes};
+}
+
+RandomValueResult Context::generateRandomValue(unsigned int limit)
+{
+    size_t randomValue;
+    d->lasterr = gpgme_op_random_value(d->ctx, limit, &randomValue);
+    if (d->lasterr) {
+        return RandomValueResult{Error{d->lasterr}};
+    }
+    return RandomValueResult{static_cast<unsigned int>(randomValue)};
 }
 
 // Engine Spawn stuff

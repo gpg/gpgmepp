@@ -94,6 +94,7 @@ set(Gpgmepp_HEADERS
     keygenerationresult.h
     keylistresult.h
     notation.h
+    randomresults.h
     result.h
     scdgetinfoassuantransaction.h
     signingresult.h

@@ -54,6 +54,8 @@ class VerificationResult;
 class SigningResult;
 class EncryptionResult;
 class VfsMountResult;
+class RandomBytesResult;
+class RandomValueResult;
 
 class EngineInfo;
 
@@ -495,6 +497,19 @@ public:
     };
     GpgME::Error startGetAuditLog(Data &output, unsigned int flags = 0);
     GpgME::Error getAuditLog(Data &output, unsigned int flags = 0);
+
+    //
+    //
+    // Random values
+    //
+    //
+    enum class RandomMode {
+        Normal = 0,
+        ZBase32 = 1
+    };
+    RandomBytesResult generateRandomBytes(size_t count, RandomMode mode = RandomMode::Normal);
+
+    RandomValueResult generateRandomValue(unsigned int limit);
 
     //
     //

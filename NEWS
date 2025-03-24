@@ -7,11 +7,22 @@ Noteworthy changes in version 2.0.0 (unreleased)
    as include directory. All headers have to be included with the prefix
    gpgme++/ now.
 
+ * New function Context::generateRandomBytes to get cryptographically
+   strong random bytes from gpg.  [T6694]
+
+ * New function Context::generateRandomValue to get a cryptographically
+   strong unsigned integer random value.  [T6694]
+
  * Removed the TrustItem listing functionality which used GpgME's trustlist
    feature which worked only for a short period in 2003.  [T4834]
 
  * Interface changes relative to the 1.24 branch of gpgme:
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Context::RandomMode                     NEW.
+ Context::generateRandomBytes            NEW.
+ Context::generateRandomValue            NEW.
+ RandomBytesResult                       NEW.
+ RandomValueResult                       NEW.
  Context::startTrustItemListing          REMOVED.
  Context::nextTrustItem                  REMOVED.
  Context::endTrustItemListing            REMOVED.
