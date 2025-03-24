@@ -3,7 +3,9 @@ Noteworthy changes in version 2.0.0 (unreleased)
 
  * First separate release of GpgME++.
 
- * cmake: The gpgme++ folder containing the header files is no longer exported
+ * build: The build system was changed from autotools to cmake.
+
+ * The gpgme++ folder containing the header files is no longer exported
    as include directory. All headers have to be included with the prefix
    gpgme++/ now.
 
