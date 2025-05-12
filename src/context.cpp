@@ -147,9 +147,19 @@ int Error::sourceID() const
     return gpgme_err_source(mErr);
 }
 
+bool Error::isSuccess() const
+{
+    return code() == GPG_ERR_NO_ERROR;
+}
+
 bool Error::isCanceled() const
 {
     return code() == GPG_ERR_CANCELED || code() == GPG_ERR_FULLY_CANCELED;
+}
+
+bool Error::isError() const
+{
+    return !isSuccess() && !isCanceled();
 }
 
 int Error::toErrno() const

@@ -56,7 +56,12 @@ public:
     int code() const;
     int sourceID() const;
 
+    /** Returns true if the error code indicates success. */
+    bool isSuccess() const;
+    /** Returns true if the error code indicates that the user canceled an operation. */
     bool isCanceled() const;
+    /** Returns true if the error code indicates that an error occurred. */
+    bool isError() const;
 
     unsigned int encodedError() const
     {
@@ -73,7 +78,7 @@ public:
 
     explicit operator bool() const
     {
-        return mErr && !isCanceled();
+        return isError();
     }
 private:
     unsigned int mErr;
