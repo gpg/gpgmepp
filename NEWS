@@ -33,6 +33,7 @@ Noteworthy changes in version 2.0.0 (unreleased)
  Context::nextTrustItem                      REMOVED.
  Context::endTrustItemListing                REMOVED.
  EventLoopInteractor::nextTrustItemEvent     REMOVED.
+ GPGMEPP_MAKE_SAFE_BOOL_OPERATOR             REMOVED.
  TrustItem                                   REMOVED.
 
 

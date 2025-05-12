@@ -132,7 +132,10 @@ public:
 
     std::vector<Option> options() const;
 
-    GPGMEPP_MAKE_SAFE_BOOL_OPERATOR(!isNull())
+    explicit operator bool() const
+    {
+        return !isNull();
+    }
 private:
     shared_gpgme_conf_comp_t comp;
 };
@@ -213,7 +216,10 @@ public:
     Argument createIntListArgument(const std::vector<int> &values) const;
     Argument createUIntListArgument(const std::vector<unsigned int> &values) const;
 
-    GPGMEPP_MAKE_SAFE_BOOL_OPERATOR(!isNull())
+    explicit operator bool() const
+    {
+        return !isNull();
+    }
 private:
     weak_gpgme_conf_comp_t  comp;
     gpgme_conf_opt_t opt;
@@ -268,7 +274,10 @@ public:
     std::vector<int>          intValues() const;
     std::vector<unsigned int> uintValues() const;
 
-    GPGMEPP_MAKE_SAFE_BOOL_OPERATOR(!isNull())
+    explicit operator bool() const
+    {
+        return !isNull();
+    }
 private:
     weak_gpgme_conf_comp_t comp;
     gpgme_conf_opt_t opt;

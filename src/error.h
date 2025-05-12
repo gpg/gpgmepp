@@ -71,7 +71,10 @@ public:
     static Error fromErrno(int err, unsigned int src = GPGMEPP_ERR_SOURCE_DEFAULT);
     static Error fromCode(unsigned int err, unsigned int src = GPGMEPP_ERR_SOURCE_DEFAULT);
 
-    GPGMEPP_MAKE_SAFE_BOOL_OPERATOR(mErr  &&!isCanceled())
+    explicit operator bool() const
+    {
+        return mErr && !isCanceled();
+    }
 private:
     unsigned int mErr;
     mutable std::string mMessage;

@@ -182,15 +182,6 @@ GPGMEPP_EXPORT bool hasFeature(unsigned long feature, unsigned long feature2);
     namespace std { template <> inline void swap< GpgME::Class >( GpgME::Class & lhs, GpgME::Class & rhs ) { lhs.swap( rhs ); } }
 # endif
 
-# ifndef GPGMEPP_MAKE_SAFE_BOOL_OPERATOR
-#  define GPGMEPP_MAKE_SAFE_BOOL_OPERATOR( Cond ) \
-    private: \
-    struct __safe_bool_dummy__ { void nonnull() {} }; \
-    typedef void ( __safe_bool_dummy__::*unspecified_bool_type )(); \
-    public: \
-    operator unspecified_bool_type() const { return ( Cond ) ? &__safe_bool_dummy__::nonnull : nullptr; }
-# endif
-
 inline int _gpgmepp_strcmp(const char *s1, const char *s2)
 {
     return s1 ? s2 ? std::strcmp(s1, s2) : 1 : s2 ? -1 : 0;
