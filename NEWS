@@ -17,6 +17,9 @@ Noteworthy changes in version 2.0.0 (unreleased)
 
  * New flag to re-encrypt OpenPGP data (requires GnuPG 2.5.1).  [D607]
 
+ * New decrypt flag to skip the actual decryption so that information
+   about the recipients can be retrieved.
+
  * Removed the TrustItem listing functionality which used GpgME's trustlist
    feature which worked only for a short period in 2003.  [T4834]
 
@@ -25,6 +28,7 @@ Noteworthy changes in version 2.0.0 (unreleased)
  Context::RandomMode                         NEW.
  Context::generateRandomBytes                NEW.
  Context::generateRandomValue                NEW.
+ Context::DecryptionFlags::DecryptListOnly   NEW.
  Context::EncryptionFlags::AddRecipient      NEW.
  Context::EncryptionFlags::ChangeRecipient   NEW.
  Error::isError                              NEW.

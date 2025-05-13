@@ -389,6 +389,7 @@ public:
         DecryptNone = 0,
         DecryptVerify = 1,
         DecryptArchive = 2,
+        DecryptListOnly = 16,
         DecryptUnwrap = 128,
         DecryptMaxValue = 0x80000000
     };
