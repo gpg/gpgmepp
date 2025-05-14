@@ -2164,56 +2164,6 @@ GpgME::Error GpgME::checkEngine(GpgME::Engine engine)
     return Error(gpgme_engine_check_version(p));
 }
 
-static const unsigned long supported_features = 0
-        | GpgME::ValidatingKeylistModeFeature
-        | GpgME::CancelOperationFeature
-        | GpgME::WrongKeyUsageFeature
-        | GpgME::DefaultCertificateInclusionFeature
-        | GpgME::GetSetEngineInfoFeature
-        | GpgME::ClearAddGetSignatureNotationsFeature
-        | GpgME::SetDataFileNameFeeature
-        | GpgME::SignatureNotationsKeylistModeFeature
-        | GpgME::KeySignatureNotationsFeature
-        | GpgME::KeyIsQualifiedFeature
-        | GpgME::SignatureNotationsCriticalFlagFeature
-        | GpgME::SignatureNotationsFlagsFeature
-        | GpgME::SignatureNotationsHumanReadableFlagFeature
-        | GpgME::SubkeyIsQualifiedFeature
-        | GpgME::EngineInfoHomeDirFeature
-        | GpgME::DecryptionResultFileNameFeature
-        | GpgME::DecryptionResultRecipientsFeature
-        | GpgME::VerificationResultFileNameFeature
-        | GpgME::SignaturePkaFieldsFeature
-        | GpgME::SignatureAlgorithmFieldsFeature
-        | GpgME::FdPointerFeature
-        | GpgME::AuditLogFeature
-        | GpgME::GpgConfEngineFeature
-        | GpgME::CancelOperationAsyncFeature
-        | GpgME::NoEncryptToEncryptionFlagFeature
-        | GpgME::CardKeyFeature
-        | GpgME::AssuanEngineFeature
-        | GpgME::EphemeralKeylistModeFeature
-        | GpgME::ImportFromKeyserverFeature
-        | GpgME::G13VFSFeature
-        | GpgME::PasswdFeature
-        ;
-
-static const unsigned long supported_features2 = 0
-        | GpgME::BinaryAndFineGrainedIdentify
-        ;
-
-bool GpgME::hasFeature(unsigned long features)
-{
-    return features == (features & supported_features);
-}
-
-bool GpgME::hasFeature(unsigned long features, unsigned long features2)
-{
-    return features  == (features  & supported_features)
-           && features2 == (features2 & supported_features2)
-           ;
-}
-
 int GpgME::setGlobalFlag(const char *name, const char *value)
 {
     return gpgme_set_global_flag(name, value);
