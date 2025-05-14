@@ -87,8 +87,6 @@ class GPGMEPP_EXPORT Signature
     friend class ::GpgME::VerificationResult;
     Signature(const std::shared_ptr<VerificationResult::Private> &parent, unsigned int index);
 public:
-    GPGMEPP_DEPRECATED typedef GpgME::Notation Notation;
-
     Signature();
 
     Signature(const Signature &other) = default;
@@ -132,10 +130,6 @@ public:
     time_t expirationTime() const;
     bool neverExpires() const;
 
-    GPGMEPP_DEPRECATED bool wrongKeyUsage() const
-    {
-        return isWrongKeyUsage();
-    }
     bool isWrongKeyUsage() const;
     bool isVerifiedUsingChainModel() const;
     bool isDeVs() const;

@@ -63,16 +63,8 @@ public:
 
     bool isNull() const;
 
-    GPGMEPP_DEPRECATED const char *unsupportedAlgortihm() const
-    {
-        return unsupportedAlgorithm();
-    }
     const char *unsupportedAlgorithm() const;
 
-    GPGMEPP_DEPRECATED bool wrongKeyUsage() const
-    {
-        return isWrongKeyUsage();
-    }
     bool isWrongKeyUsage() const;
     bool isDeVs() const;
     bool isBetaCompliance() const;

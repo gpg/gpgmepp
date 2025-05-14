@@ -242,11 +242,6 @@ bool Key::canSign() const
     return key && key->can_sign;
 }
 
-bool Key::canReallySign() const
-{
-    return canSign();
-}
-
 bool Key::canCertify() const
 {
     return key && key->can_certify;
@@ -939,12 +934,6 @@ UserID::Signature::Signature(const shared_gpgme_key_t &k, gpgme_user_id_t u, uns
 UserID::Signature::Signature(const shared_gpgme_key_t &k, gpgme_user_id_t u, gpgme_key_sig_t s)
     : key(k), uid(verify_uid(k, u)), sig(verify_signature(uid, s))
 {
-}
-
-bool UserID::Signature::operator<(const Signature &other)
-{
-    // kept for binary compatibility
-    return static_cast<const UserID::Signature *>(this)->operator<(other);
 }
 
 bool UserID::Signature::operator<(const Signature &other) const

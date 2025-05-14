@@ -120,7 +120,6 @@ public:
     /** Returns true, if the key can be used for signing (i.e. it's not bad
      *  and has a signing subkey) or if the primary subkey can sign. */
     bool canSign() const;
-    GPGMEPP_DEPRECATED bool canReallySign() const;
     /** Returns true, if the key can be used for certification (i.e. it's not bad
      *  and has a certification subkey) or if the primary subkey can certify. */
     bool canCertify() const;
@@ -141,10 +140,6 @@ public:
     bool hasAuthenticate() const;
 
     bool hasSecret() const;
-    GPGMEPP_DEPRECATED bool isSecret() const
-    {
-        return hasSecret();
-    }
 
     /*!
       @return true if this is a X.509 root certificate (currently
@@ -476,8 +471,6 @@ private:
 class GPGMEPP_EXPORT UserID::Signature
 {
 public:
-    GPGMEPP_DEPRECATED typedef GpgME::Notation Notation;
-
     Signature();
     Signature(const shared_gpgme_key_t &key, gpgme_user_id_t uid, gpgme_key_sig_t sig);
     Signature(const shared_gpgme_key_t &key, gpgme_user_id_t uid, unsigned int idx);
@@ -499,8 +492,6 @@ public:
 
     /*! Defines a canonical sort order for signatures of the same user ID. */
     bool operator<(const Signature &other) const;
-
-    GPGMEPP_DEPRECATED bool operator<(const Signature &other);
 
     bool isNull() const
     {
