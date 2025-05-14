@@ -1603,6 +1603,7 @@ Error Context::setTofuPolicyStart(const Key &k, unsigned int policy)
                  k.impl(), to_tofu_policy_t(policy)));
 }
 
+// deprecated
 Error Context::startCreateKey (const char *userid,
                                const char *algo,
                                unsigned long reserved,
@@ -1619,6 +1620,7 @@ Error Context::startCreateKey (const char *userid,
                  flags));
 }
 
+// deprecated
 Error Context::createKey (const char *userid,
                           const char *algo,
                           unsigned long reserved,
@@ -1635,6 +1637,7 @@ Error Context::createKey (const char *userid,
                  flags));
 }
 
+// deprecated
 KeyGenerationResult Context::createKeyEx (const char *userid,
                                           const char *algo,
                                           unsigned long reserved,
@@ -1650,6 +1653,36 @@ KeyGenerationResult Context::createKeyEx (const char *userid,
                  certkey.impl(),
                  flags);
     return KeyGenerationResult(d->ctx, Error(d->lasterr));
+}
+
+KeyGenerationResult Context::createKey(const std::string &userid,
+                                       const std::string &algo,
+                                       unsigned long expires,
+                                       CreationFlags flags)
+{
+    d->lasterr = gpgme_op_createkey(d->ctx,
+                                    userid.c_str(),
+                                    algo.c_str(),
+                                    0,
+                                    expires,
+                                    nullptr,
+                                    flags);
+    return KeyGenerationResult{d->ctx, Error{d->lasterr}};
+}
+
+Error Context::startCreateKey(const std::string &userid,
+                              const std::string &algo,
+                              unsigned long expires,
+                              CreationFlags flags)
+{
+    d->lasterr = gpgme_op_createkey_start(d->ctx,
+                                          userid.c_str(),
+                                          algo.c_str(),
+                                          0,
+                                          expires,
+                                          nullptr,
+                                          flags);
+    return Error{d->lasterr};
 }
 
 Error Context::addUid(const Key &k, const char *userid)
@@ -1686,6 +1719,7 @@ Error Context::startSetPrimaryUid(const Key &k, const char *userid)
     return Error(d->lasterr = gpgme_op_set_uid_flag_start(d->ctx, k.impl(), userid, "primary", nullptr));
 }
 
+// deprecated
 Error Context::createSubkey(const Key &k, const char *algo,
                             unsigned long reserved,
                             unsigned long expires,
@@ -1695,6 +1729,7 @@ Error Context::createSubkey(const Key &k, const char *algo,
                  k.impl(), algo, reserved, expires, flags));
 }
 
+// deprecated
 Error Context::startCreateSubkey(const Key &k, const char *algo,
                                  unsigned long reserved,
                                  unsigned long expires,
@@ -1702,6 +1737,34 @@ Error Context::startCreateSubkey(const Key &k, const char *algo,
 {
     return Error(d->lasterr = gpgme_op_createsubkey_start(d->ctx,
                  k.impl(), algo, reserved, expires, flags));
+}
+
+KeyGenerationResult Context::createSubkey(const Key &k,
+                                          const std::string &algo,
+                                          unsigned long expires,
+                                          CreationFlags flags)
+{
+    d->lasterr = gpgme_op_createsubkey(d->ctx,
+                                       k.impl(),
+                                       algo.c_str(),
+                                       0,
+                                       expires,
+                                       flags);
+    return KeyGenerationResult{d->ctx, Error{d->lasterr}};
+}
+
+Error Context::startCreateSubkey(const Key &k,
+                                 const std::string &algo,
+                                 unsigned long expires,
+                                 CreationFlags flags)
+{
+    d->lasterr = gpgme_op_createsubkey_start(d->ctx,
+                                             k.impl(),
+                                             algo.c_str(),
+                                             0,
+                                             expires,
+                                             flags);
+    return Error{d->lasterr};
 }
 
 static std::string getLFSeparatedListOfStrings(const std::vector<std::string> &strings)

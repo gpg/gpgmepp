@@ -28,6 +28,7 @@ macro(_g10_add_testprogram _source)
     )
 endmacro()
 
+_g10_add_testprogram(run-createkey.cpp)
 _g10_add_testprogram(run-genrandom.cpp)
 _g10_add_testprogram(run-getkey.cpp)
 _g10_add_testprogram(run-keylist.cpp)

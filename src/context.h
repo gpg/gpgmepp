@@ -32,6 +32,7 @@
 
 #include <memory>
 #include <string>
+#include <type_traits>
 #include <vector>
 #include <utility>
 #include <iosfwd>
@@ -269,26 +270,44 @@ public:
     //
     // Modern Interface actions. Require 2.1.x
     //
-    Error startCreateKey (const char *userid,
-                          const char *algo,
-                          unsigned long reserved,
-                          unsigned long expires,
-                          const Key &certkey,
-                          unsigned int flags);
-    Error createKey (const char *userid,
-                     const char *algo,
-                     unsigned long reserved,
-                     unsigned long expires,
-                     const Key &certkey,
-                     unsigned int flags);
 
-    // Same as create key but returning a result
-    GpgME::KeyGenerationResult createKeyEx (const char *userid,
-                                            const char *algo,
-                                            unsigned long reserved,
-                                            unsigned long expires,
-                                            const Key &certkey,
-                                            unsigned int flags);
+    enum CreationFlags : unsigned int {
+        // Keep in line with core's GPGME_CREATE_* flags
+        CreateUseDefaults  = 0,
+        CreateSign         = (1 << 0),  /* Allow usage: signing. */
+        CreateEncrypt      = (1 << 1),  /* Allow usage: encryption. */
+        CreateCertify      = (1 << 2),  /* Allow usage: certification. */
+        CreateAuthenticate = (1 << 3),  /* Allow usage: authentication. */
+        CreateNoPassword   = (1 << 7),  /* Create w/o passphrase. */
+        CreateForce        = (1 << 12), /* Force creation if key with same user ID already exists. */
+        CreateNoExpire     = (1 << 13), /* Create w/o expiration. */
+        CreateADSK         = (1 << 14), /* Add an ADSK. */
+        CreateGroupKey     = (1 << 15), /* Flag as group key. Needs gpg 2.2.48, 2.4.8, or 2.5.7+. */
+    };
+
+    /*!
+     * Create a new OpenPGP key.
+     *
+     * Creates a new OpenPGP key with user ID \a userid. \a algo needs to be in a format
+     * understood by `gpg --quick-gen-key`. If \a expires is 0 then the new key will have
+     * the default expiration unless the CreateNoExpire flag is set. If \a flags contains
+     * neither one of the usage flags nor the CreateGroupKey flag then an OpenPGP key with
+     * standard layout (primary signing and certification key plus encryption subkey) is
+     * created. Otherwise, a primary key with the specified usage is created.
+     */
+    GpgME::KeyGenerationResult createKey(const std::string &userid,
+                                         const std::string &algo = {},
+                                         unsigned long expires = 0,
+                                         CreationFlags flags = CreateUseDefaults);
+    /*!
+     * Starts the creation of a new OpenPGP key.
+     *
+     * \sa createKey
+     */
+    Error startCreateKey(const std::string &userid,
+                         const std::string &algo = {},
+                         unsigned long expires = 0,
+                         CreationFlags flags = CreateUseDefaults);
 
     Error addUid(const Key &key, const char *userid);
     Error startAddUid(const Key &key, const char *userid);
@@ -299,14 +318,26 @@ public:
     Error setPrimaryUid(const Key &key, const char *userid);
     Error startSetPrimaryUid(const Key &key, const char *userid);
 
-    Error createSubkey(const Key &key, const char *algo,
-                       unsigned long reserved = 0,
-                       unsigned long expires = 0,
-                       unsigned int flags = 0);
-    Error startCreateSubkey(const Key &key, const char *algo,
-                            unsigned long reserved = 0,
+    /*!
+     * Create a new subkey for a given OpenPGP key.
+     *
+     * Creates a new subkey for the key \a key. \a algo needs to be in a format
+     * understood by `gpg --quick-gen-key`. If \a expires is 0 then the new key will have
+     * the default expiration unless the CreateNoExpire flag is set.
+     */
+    KeyGenerationResult createSubkey(const Key &key,
+                                     const std::string &algo = {},
+                                     unsigned long expires = 0,
+                                     CreationFlags flags = CreateUseDefaults);
+    /*!
+     * Start the creation a new subkey for a given OpenPGP key.
+     *
+     * \sa createSubkey
+     */
+    Error startCreateSubkey(const Key &key,
+                            const std::string &algo = {},
                             unsigned long expires = 0,
-                            unsigned int flags = 0);
+                            CreationFlags flags = CreateUseDefaults);
 
     enum SetExpireFlags {
         SetExpireDefault = 0,
@@ -573,6 +604,35 @@ public:
         return d;
     }
 
+    GPGMEPP_DEPRECATED Error startCreateKey(const char *userid,
+                                            const char *algo,
+                                            unsigned long reserved,
+                                            unsigned long expires,
+                                            const Key &certkey,
+                                            unsigned int flags);
+    GPGMEPP_DEPRECATED Error createKey(const char *userid,
+                                       const char *algo,
+                                       unsigned long reserved,
+                                       unsigned long expires,
+                                       const Key &certkey,
+                                       unsigned int flags);
+    GPGMEPP_DEPRECATED GpgME::KeyGenerationResult createKeyEx(const char *userid,
+                                                              const char *algo,
+                                                              unsigned long reserved,
+                                                              unsigned long expires,
+                                                              const Key &certkey,
+                                                              unsigned int flags);
+    GPGMEPP_DEPRECATED Error createSubkey(const Key &key,
+                                          const char *algo,
+                                          unsigned long reserved,
+                                          unsigned long expires,
+                                          unsigned int flags);
+    GPGMEPP_DEPRECATED Error startCreateSubkey(const Key &key,
+                                               const char *algo,
+                                               unsigned long reserved,
+                                               unsigned long expires,
+                                               unsigned int flags);
+
 private:
     // Helper functions that need to be context because they rely
     // on the "Friendlyness" of context to access the gpgme types.
@@ -589,6 +649,19 @@ private: // disable...
 GPGMEPP_EXPORT std::ostream &operator<<(std::ostream &os, Context::CertificateInclusion incl);
 GPGMEPP_EXPORT std::ostream &operator<<(std::ostream &os, Context::EncryptionFlags flags);
 GPGMEPP_EXPORT std::ostream &operator<<(std::ostream &os, Context::AuditLogFlags flags);
+
+inline Context::CreationFlags operator|(Context::CreationFlags lh, Context::CreationFlags rh)
+{
+    return static_cast<Context::CreationFlags>(
+        std::underlying_type_t<Context::CreationFlags>(lh) |
+        std::underlying_type_t<Context::CreationFlags>(rh));
+}
+inline Context::CreationFlags &operator|=(Context::CreationFlags &lh, Context::CreationFlags rh)
+{
+    return (Context::CreationFlags &)(
+        (std::underlying_type_t<Context::CreationFlags> &)lh |=
+        std::underlying_type_t<Context::CreationFlags>(rh));
+}
 
 } // namespace GpgME
 
