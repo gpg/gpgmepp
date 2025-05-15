@@ -43,6 +43,7 @@ set(Gpgmepp_SOURCES
     editinteractor.cpp
     encryptionresult.cpp
     engineinfo.cpp
+    error.cpp
     eventloopinteractor.cpp
     exception.cpp
     gpgaddexistingsubkeyeditinteractor.cpp
