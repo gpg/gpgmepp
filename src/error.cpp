@@ -123,7 +123,11 @@ Error Error::fromCode(unsigned int err, unsigned int src)
     return Error(gpgme_err_make(static_cast<gpgme_err_source_t>(src), static_cast<gpgme_err_code_t>(err)));
 }
 
+namespace GpgME {
+
 std::ostream &operator<<(std::ostream &os, const Error &err)
 {
     return os << "GpgME::Error(" << err.encodedError() << " (" << err.asStdString() << "))";
+}
+
 }
