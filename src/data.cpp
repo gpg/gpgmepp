@@ -83,7 +83,7 @@ GpgME::Data::Data(const char *filename)
     }
 }
 
-GpgME::Data::Data(const char *filename, off_t offset, size_t length)
+GpgME::Data::Data(const char *filename, gpgme_off_t offset, size_t length)
 {
     gpgme_data_t data;
     const gpgme_error_t e = gpgme_data_new_from_filepart(&data, filename, nullptr, offset, length);
@@ -97,7 +97,7 @@ GpgME::Data::Data(FILE *fp)
     d.reset(new Private(e ? nullptr : data));
 }
 
-GpgME::Data::Data(FILE *fp, off_t offset, size_t length)
+GpgME::Data::Data(FILE *fp, gpgme_off_t offset, size_t length)
 {
     gpgme_data_t data;
     const gpgme_error_t e = gpgme_data_new_from_filepart(&data, nullptr, fp, offset, length);
@@ -134,7 +134,7 @@ GpgME::Data::Data(DataProvider *dp)
         d->data = nullptr;
     }
     if (dp->isSupported(DataProvider::Seek)) {
-        off_t size = seek(0, SEEK_END);
+        gpgme_off_t size = seek(0, SEEK_END);
         seek(0, SEEK_SET);
         std::string sizestr = std::to_string(size);
         // Ignore errors as this is optional
@@ -222,17 +222,17 @@ GpgME::Error GpgME::Data::setFileName(const std::string &name)
     return Error(gpgme_data_set_file_name(d->data, name.c_str()));
 }
 
-ssize_t GpgME::Data::read(void *buffer, size_t length)
+gpgme_ssize_t GpgME::Data::read(void *buffer, size_t length)
 {
     return gpgme_data_read(d->data, buffer, length);
 }
 
-ssize_t GpgME::Data::write(const void *buffer, size_t length)
+gpgme_ssize_t GpgME::Data::write(const void *buffer, size_t length)
 {
     return gpgme_data_write(d->data, buffer, length);
 }
 
-off_t GpgME::Data::seek(off_t offset, int whence)
+gpgme_off_t GpgME::Data::seek(gpgme_off_t offset, int whence)
 {
     return gpgme_data_seek(d->data, offset, whence);
 }

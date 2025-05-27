@@ -25,9 +25,9 @@
 #ifndef __GPGMEPP_INTERFACES_DATAPROVIDER_H__
 #define __GPGMEPP_INTERFACES_DATAPROVIDER_H__
 
-#include <sys/types.h>
-
 #include <gpgme++/gpgmepp_export.h>
+
+#include <gpgme.h>
 
 #include <gpg-error.h>
 
@@ -44,9 +44,15 @@ public:
     };
     virtual bool isSupported(Operation op) const = 0;
 
-    virtual ssize_t read(void   *buffer, size_t bufSize) = 0;
+#ifdef _WIN32
+    virtual gpgme_ssize_t read(void *buffer, size_t bufSize) = 0;
+    virtual gpgme_ssize_t write(const void *buffer, size_t bufSize) = 0;
+    virtual gpgme_off_t seek(gpgme_off_t offset, int whence) = 0;
+#else
+    virtual ssize_t read(void *buffer, size_t bufSize) = 0;
     virtual ssize_t write(const void *buffer, size_t bufSize) = 0;
     virtual off_t seek(off_t offset, int whence) = 0;
+#endif
     virtual void release() = 0;
 };
 

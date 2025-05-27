@@ -84,7 +84,7 @@ gpgme_error_t passphrase_callback(void *opaque, const char *uid_hint, const char
             size_t passphrase_length = std::strlen(passphrase);
             size_t written = 0;
             do {
-                ssize_t now_written = gpgme_io_write(fd, passphrase + written, passphrase_length - written);
+                gpgme_ssize_t now_written = gpgme_io_write(fd, passphrase + written, passphrase_length - written);
                 if (now_written < 0) {
                     err = make_err_from_syserror();
                     break;
@@ -136,7 +136,7 @@ data_seek_callback(void *opaque, gpgme_off_t offset, int whence)
         gpgme_err_set_errno(gpgme_err_code_to_errno(GPG_ERR_EINVAL));
         return -1;
     }
-    return provider->seek((off_t)offset, whence);
+    return provider->seek(offset, whence);
 }
 
 static void data_release_callback(void *opaque)

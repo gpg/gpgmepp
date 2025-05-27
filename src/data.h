@@ -26,7 +26,8 @@
 #include "global.h"
 #include "key.h"
 
-#include <sys/types.h> // for size_t, off_t
+#include <gpgme.h>
+
 #include <cstdint> // unit64_t
 #include <cstdio> // FILE
 #include <algorithm>
@@ -51,8 +52,13 @@ public:
     // Memory-Based Data Buffers:
     Data(const char *buffer, size_t size, bool copy = true);
     explicit Data(const char *filename);
+#ifdef _WIN32
+    Data(const char *filename, gpgme_off_t offset, size_t length);
+    Data(std::FILE *fp, gpgme_off_t offset, size_t length);
+#else
     Data(const char *filename, off_t offset, size_t length);
     Data(std::FILE *fp, off_t offset, size_t length);
+#endif
     // File-Based Data Buffers:
     explicit Data(std::FILE *fp);
     explicit Data(int fd);
@@ -109,9 +115,15 @@ public:
     Error setFileName(const char *name);
     Error setFileName(const std::string &name);
 
+#ifdef _WIN32
+    gpgme_ssize_t read(void *buffer, size_t length);
+    gpgme_ssize_t write(const void *buffer, size_t length);
+    gpgme_off_t seek(gpgme_off_t offset, int whence);
+#else
     ssize_t read(void *buffer, size_t length);
     ssize_t write(const void *buffer, size_t length);
     off_t seek(off_t offset, int whence);
+#endif
 
     /* Convenience function to do a seek (0, SEEK_SET).  */
     Error rewind();
