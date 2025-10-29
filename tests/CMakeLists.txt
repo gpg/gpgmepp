@@ -28,6 +28,14 @@ macro(_g10_add_testprogram _source)
     )
 endmacro()
 
+macro(_g10_add_test _source)
+    _g10_add_testprogram(${_source})
+    get_filename_component(_name ${_source} NAME_WE)
+    add_test(NAME ${_name} COMMAND ${_name})
+endmacro()
+
+_g10_add_test(t-utils.cpp)
+
 _g10_add_testprogram(run-createkey.cpp)
 _g10_add_testprogram(run-genrandom.cpp)
 _g10_add_testprogram(run-getkey.cpp)
