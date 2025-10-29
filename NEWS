@@ -1,3 +1,14 @@
+Noteworthy changes in version 2.0.1 (unreleased)  [C7/A0/R)]
+------------------------------------------------
+
+ * New function Subkey::keyGrips to get the list of keygrips for
+   a subkey using combined algorithms.
+
+ * Interface changes relative to the 2.0.0 release:
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ Subkey::keyGrips                            NEW.
+
 Noteworthy changes in version 2.0.0 (2025-06-03)  [C7/A0/R0]
 ------------------------------------------------
 
