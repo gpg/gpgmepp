@@ -89,6 +89,13 @@ enum class RevocationReason {
     NoLongerUsed = 3
 };
 
+enum class DeletionFlags : int {
+    // Keep in line with one's GPGME_DELETE_* flags
+    UseDefaults = 0,
+    AllowSecret = (1 << 0),
+    Force = (1 << 1),
+};
+
 GPGMEPP_EXPORT std::ostream &operator<<(std::ostream &os, Protocol proto);
 GPGMEPP_EXPORT std::ostream &operator<<(std::ostream &os, Engine eng);
 GPGMEPP_EXPORT std::ostream &operator<<(std::ostream &os, KeyListMode mode);
@@ -123,6 +130,11 @@ GPGMEPP_EXPORT int setGlobalFlag(const char *name, const char *value);
 
 GPGMEPP_EXPORT GIOChannel *getGIOChannel(int fd);
 GPGMEPP_EXPORT QIODevice   *getQIODevice(int fd);
+
+inline DeletionFlags operator|(DeletionFlags lhs, DeletionFlags rhs)
+{
+    return static_cast<DeletionFlags>(static_cast<char>(lhs) | static_cast<char>(rhs));
+}
 
 } // namespace GpgME
 

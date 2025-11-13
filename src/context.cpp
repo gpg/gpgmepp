@@ -760,8 +760,13 @@ ImportResult Context::importResult() const
 
 Error Context::deleteKey(const Key &key, bool allowSecretKeyDeletion)
 {
+    return deleteKey(key, allowSecretKeyDeletion ? DeletionFlags::AllowSecret : DeletionFlags::UseDefaults);
+}
+
+Error Context::deleteKey(const Key &key, DeletionFlags flags)
+{
     d->lastop = Private::Delete;
-    return Error(d->lasterr = gpgme_op_delete(d->ctx, key.impl(), int(allowSecretKeyDeletion)));
+    return Error(d->lasterr = gpgme_op_delete_ext(d->ctx, key.impl(), (int) flags));
 }
 
 Error Context::startKeyDeletion(const Key &key, bool allowSecretKeyDeletion)

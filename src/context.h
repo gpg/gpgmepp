@@ -250,6 +250,7 @@ public:
     //
 
     GpgME::Error deleteKey(const Key &key, bool allowSecretKeyDeletion = false);
+    GpgME::Error deleteKey(const Key &key, DeletionFlags flags);
     GpgME::Error startKeyDeletion(const Key &key, bool allowSecretKeyDeletion = false);
 
     //
