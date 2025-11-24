@@ -80,6 +80,7 @@ set(Gpgmepp_HEADERS
     error.h
     eventloopinteractor.h
     exception.h
+    flags.h
     global.h
     gpgaddexistingsubkeyeditinteractor.h
     gpgadduserideditinteractor.h

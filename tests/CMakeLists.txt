@@ -34,6 +34,7 @@ macro(_g10_add_test _source)
     add_test(NAME ${_name} COMMAND ${_name})
 endmacro()
 
+_g10_add_test(t-flags.cpp)
 _g10_add_test(t-utils.cpp)
 
 _g10_add_testprogram(run-createkey.cpp)
