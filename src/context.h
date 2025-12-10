@@ -249,9 +249,8 @@ public:
     // Key Deletion
     //
 
-    GpgME::Error deleteKey(const Key &key, bool allowSecretKeyDeletion = false);
     GpgME::Error deleteKey(const Key &key, DeletionFlags flags);
-    GpgME::Error startKeyDeletion(const Key &key, bool allowSecretKeyDeletion = false);
+    GpgME::Error startKeyDeletion(const Key &key, DeletionFlags flags);
 
     //
     // Passphrase changing
@@ -633,6 +632,8 @@ public:
                                                unsigned long reserved,
                                                unsigned long expires,
                                                unsigned int flags);
+    GPGMEPP_DEPRECATED GpgME::Error deleteKey(const Key &key, bool allowSecretKeyDeletion = false);
+    GPGMEPP_DEPRECATED GpgME::Error startKeyDeletion(const Key &key, bool allowSecretKeyDeletion = false);
 
 private:
     // Helper functions that need to be context because they rely

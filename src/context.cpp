@@ -771,8 +771,13 @@ Error Context::deleteKey(const Key &key, DeletionFlags flags)
 
 Error Context::startKeyDeletion(const Key &key, bool allowSecretKeyDeletion)
 {
+    return startKeyDeletion(key, allowSecretKeyDeletion ? DeletionFlags{DeletionFlag::AllowSecret} : DeletionFlags{});
+}
+
+Error Context::startKeyDeletion(const Key &key, DeletionFlags flags)
+{
     d->lastop = Private::Delete;
-    return Error(d->lasterr = gpgme_op_delete_start(d->ctx, key.impl(), int(allowSecretKeyDeletion)));
+    return Error(d->lasterr = gpgme_op_delete_start(d->ctx, key.impl(), flags.toUnderlyingType()));
 }
 
 Error Context::passwd(const Key &key)
