@@ -26,6 +26,7 @@
 #ifndef __GPGMEPP_GLOBAL_H__
 #define __GPGMEPP_GLOBAL_H__
 
+#include "flags.h"
 #include "gpgmefw.h"
 #include "gpgmepp_export.h"
 
@@ -89,12 +90,13 @@ enum class RevocationReason {
     NoLongerUsed = 3
 };
 
-enum class DeletionFlags : int {
-    // Keep in line with one's GPGME_DELETE_* flags
-    UseDefaults = 0,
+enum class DeletionFlag : unsigned int {
+    // Keep in line with GPGME_DELETE_* flags
     AllowSecret = (1 << 0),
     Force = (1 << 1),
 };
+using DeletionFlags = Flags<DeletionFlag>;
+GPGMEPP_DEFINE_ENUM_FLAG_OPERATORS(DeletionFlags)
 
 GPGMEPP_EXPORT std::ostream &operator<<(std::ostream &os, Protocol proto);
 GPGMEPP_EXPORT std::ostream &operator<<(std::ostream &os, Engine eng);
@@ -130,11 +132,6 @@ GPGMEPP_EXPORT int setGlobalFlag(const char *name, const char *value);
 
 GPGMEPP_EXPORT GIOChannel *getGIOChannel(int fd);
 GPGMEPP_EXPORT QIODevice   *getQIODevice(int fd);
-
-inline DeletionFlags operator|(DeletionFlags lhs, DeletionFlags rhs)
-{
-    return static_cast<DeletionFlags>(static_cast<char>(lhs) | static_cast<char>(rhs));
-}
 
 } // namespace GpgME
 
