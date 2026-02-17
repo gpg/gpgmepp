@@ -541,6 +541,14 @@ public:
         Normal = 0,
         ZBase32 = 1
     };
+    /*!
+     * Generate random bytes.
+     *
+     * This function creates a buffer of \a count bytes and fills this buffer by calling
+     * gpgme_op_random_bytes. \a count must be at most \c 1024. If \a mode is \c ZBase32
+     * then \a count must be at least \c 31. In this case the buffer is filled with 30
+     * ASCII characters followed by a null byte; the remainder of the buffer is uninitialized.
+     */
     RandomBytesResult generateRandomBytes(size_t count, RandomMode mode = RandomMode::Normal);
 
     RandomValueResult generateRandomValue(unsigned int limit);
