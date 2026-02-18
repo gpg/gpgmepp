@@ -1847,7 +1847,7 @@ RandomBytesResult Context::generateRandomBytes(size_t count, RandomMode mode)
     if (d->lasterr) {
         return RandomBytesResult{Error{d->lasterr}};
     }
-    return RandomBytesResult{randomBytes};
+    return RandomBytesResult{std::move(randomBytes)};
 }
 
 RandomValueResult Context::generateRandomValue(unsigned int limit)

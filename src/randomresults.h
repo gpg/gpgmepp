@@ -42,6 +42,10 @@ public:
         : mValue{value}
     {
     }
+    explicit RandomBytesResult(value_type &&value)
+        : mValue{std::move(value)}
+    {
+    }
     explicit RandomBytesResult(const Error &err)
         : Result{err}
     {
