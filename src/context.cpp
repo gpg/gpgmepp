@@ -1839,10 +1839,24 @@ const char *Context::getFlag(const char *name) const
   return gpgme_get_ctx_flag(d->ctx, name);
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 RandomBytesResult Context::generateRandomBytes(size_t count, RandomMode mode)
 {
     RandomBytesResult::value_type randomBytes(count);
     d->lasterr = gpgme_op_random_bytes(d->ctx, static_cast<gpgme_random_mode_t>(mode),
+                                       reinterpret_cast<char *>(randomBytes.data()), count);
+    if (d->lasterr) {
+        return RandomBytesResult{Error{d->lasterr}};
+    }
+    return RandomBytesResult{std::move(randomBytes)};
+}
+#pragma GCC diagnostic pop
+
+RandomBytesResult Context::generateRandomBytes(size_t count)
+{
+    RandomBytesResult::value_type randomBytes(count);
+    d->lasterr = gpgme_op_random_bytes(d->ctx, GPGME_RANDOM_MODE_NORMAL,
                                        reinterpret_cast<char *>(randomBytes.data()), count);
     if (d->lasterr) {
         return RandomBytesResult{Error{d->lasterr}};
@@ -1858,6 +1872,17 @@ RandomValueResult Context::generateRandomValue(unsigned int limit)
         return RandomValueResult{Error{d->lasterr}};
     }
     return RandomValueResult{static_cast<unsigned int>(randomValue)};
+}
+
+RandomZBase32StringResult Context::generateRandomZBase32String()
+{
+    std::string randomString(30, '\0');
+    d->lasterr = gpgme_op_random_bytes(d->ctx, GPGME_RANDOM_MODE_ZBASE32,
+                                       randomString.data(), 31);
+    if (d->lasterr) {
+        return RandomZBase32StringResult{Error{d->lasterr}};
+    }
+    return RandomZBase32StringResult{std::move(randomString)};
 }
 
 // Engine Spawn stuff

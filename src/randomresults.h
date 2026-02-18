@@ -85,6 +85,35 @@ private:
     unsigned int mValue = 0;
 };
 
+class GPGMEPP_EXPORT RandomZBase32StringResult : public Result
+{
+public:
+    RandomZBase32StringResult()
+        : Result{GPG_ERR_NO_VALUE}
+    {
+    }
+    explicit RandomZBase32StringResult(const std::string &value)
+        : mValue{value}
+    {
+    }
+    explicit RandomZBase32StringResult(std::string &&value)
+        : mValue{std::move(value)}
+    {
+    }
+    explicit RandomZBase32StringResult(const Error &err)
+        : Result{err}
+    {
+    }
+
+    const std::string &value() const
+    {
+        return mValue;
+    }
+
+private:
+    std::string mValue;
+};
+
 } // namespace GpgME
 
 #endif /* __GPGMEPP_RANDOMRESULTS_H__ */

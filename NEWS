@@ -4,9 +4,15 @@ Noteworthy changes in version 2.0.1 (unreleased)  [C7/A0/R)]
  * New function Subkey::keyGrips to get the list of keygrips for
    a subkey using combined algorithms.
 
+ * New function Context::generateRandomZBase32String to get a
+   cryptographically strong string of z-base-32 characters.  [T8108]
+
  * Interface changes relative to the 2.0.0 release:
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ Context::RandomMode                         DEPRECATED.
+ Context::generateRandomBytes           CHANGED: New overload; deprecated old.
+ Context::generateRandomZBase32String        NEW.
  Subkey::keyGrips                            NEW.
 
 Noteworthy changes in version 2.0.0 (2025-06-03)  [C7/A0/R0]

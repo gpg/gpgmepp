@@ -143,12 +143,11 @@ int main (int argc, char **argv)
             break;
         }
         case ZBase32: {
-            const auto result = ctx->generateRandomBytes(31, Context::RandomMode::ZBase32);
+            const auto result = ctx->generateRandomZBase32String();
             if (result.error()) {
                 std::cerr << "Error: Failed to generate random zbase32 characters: " << result.error().asStdString() << std::endl;
             } else {
-                std::string password{reinterpret_cast<const char *>(result.value().data())};
-                std::cout << password << std::endl;
+                std::cout << result.value() << std::endl;
             }
             break;
         }
