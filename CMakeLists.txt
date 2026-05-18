@@ -21,7 +21,7 @@
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-set(FULL_VERSION "2.0.1")
+set(FULL_VERSION "2.1.0")
 
 string(REGEX MATCH "^[0-9]+.[0-9]+.[0-9]+" cmake_compat_version ${FULL_VERSION})
 project(gpgmepp VERSION ${cmake_compat_version})
@@ -35,8 +35,8 @@ set(VERSION_MICRO ${PROJECT_VERSION_PATCH})
 #   (Interfaces added/removed/changed:	CURRENT++, REVISION=0)
 #   (Interfaces added:			AGE++)
 #   (Interfaces removed:		AGE=0)
-set(LIBGPGMEPP_LT_CURRENT "7")
-set(LIBGPGMEPP_LT_AGE "0")
+set(LIBGPGMEPP_LT_CURRENT "8")
+set(LIBGPGMEPP_LT_AGE "1")
 set(LIBGPGMEPP_LT_REVISION "0")
 math(EXPR LIBGPGMEPP_SOVERSION "${LIBGPGMEPP_LT_CURRENT} - ${LIBGPGMEPP_LT_AGE}")
 
