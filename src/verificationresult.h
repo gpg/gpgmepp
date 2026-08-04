@@ -124,6 +124,11 @@ public:
 
     const char *fingerprint() const;
 
+    /*! The issuer serial number of the S/MIME signing certificate. */
+    const char *issuerSerial() const;
+    /*! The issuer name of the S/MIME signing certificate. */
+    const char *issuerName() const;
+
     Error status() const;
 
     time_t creationTime() const;

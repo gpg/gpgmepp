@@ -1,9 +1,15 @@
 Noteworthy changes in version 2.1.1 (unreleased)  [C8/A1/R_]
 ------------------------------------------------
 
+ * VerificationResult now provides issuer serial number and issuer name
+   for S/MIME certificates used for signing that are not included in a
+   signature.  [T8369]
+
  * Interface changes relative to the 2.1.0 release:
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Subkey::isPrimaryKey                        NEW.
+ VerificationResult::issuerSerial            NEW.
+ VerificationResult::issuerName              NEW.
 
 Noteworthy changes in version 2.1.0 (2026-05-18)  [C8/A1/R0]
 ------------------------------------------------
